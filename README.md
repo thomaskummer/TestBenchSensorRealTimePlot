@@ -66,7 +66,7 @@ python switch.py
 The output should be: "Successfully read every sensor" and a time. If you got an error 
 check all connection. Proceed only if the sensors are working.
 
-## Connect your laptop and the Raspberry
+## Step 4: Connect your laptop and the Raspberry
 Connect the Raspberry over ethernet to the Network switch and the Network switch 
 to your laptop. 
 
@@ -82,7 +82,7 @@ On your laptop open Network settings and add a new wired connection. Copy the ma
 and the ip address to the corresponding places and change the last number of the ip address.
  
 
-## Sensor readout and live plot
+## Step 5: Sensor readout and live plot
 
 1. On the Raspberry open the client.py file and change the HOST name to the ip address of your local 
 computer (the same as the ip address of the Raspberry except the last number, which you changed 
@@ -103,7 +103,7 @@ python client.py
 
 You should now see the live plots of the sensors you connected. 
 
-## Saving data
+## Step 6: Saving data
 
 If you want to store data, just type a 1 in the terminal where the server is running. 
 By typing a 2 you stop the saving and the data is stored in an csv file. 
