@@ -18,7 +18,7 @@ class animate():
         self.host = host
         self.port = port
 
-        self.T_end = 5
+        self.T_end = 10
         self.fig = fig
         self.P_max = 150
         self.global_counter = 0
@@ -38,7 +38,7 @@ class animate():
         self.ax1 = ax[0, 1]
         self.ax1.set_title("Right Ventricle", fontsize=15)
         self.ax1.set_xlim([0, self.T_end+0.5])
-        self.ax1.set_ylim([-2, self.P_max])
+        self.ax1.set_ylim([-2, 50])
         self.ax1.set_ylabel("pressure [mmhg]", fontsize=15)
         self.ax1.set_xlabel("time [s]", fontsize=15)
 
@@ -46,8 +46,8 @@ class animate():
         self.ax2 = ax[0, 2]
         self.ax2.set_title("Patch vacuum",fontsize=15)
         self.ax2.set_xlim([0, self.T_end+0.5])
-        self.ax2.set_ylim([-2, self.P_max])
-        self.ax2.set_ylabel("pressure [mmhg]", fontsize=15)
+        self.ax2.set_ylim([-1, 0])
+        self.ax2.set_ylabel("pressure [bar]", fontsize=15)
         self.ax2.set_xlabel("time [s]", fontsize=15)
 
         # 4
@@ -155,8 +155,8 @@ class animate():
 
     def get_data(self, i):
         if (time.time()-self.start)>self.T_end:
+        #if self.data_array[0]>= self.T_end:
             self.global_counter += 1
-
             self.x.pop(0)
             self.y0.pop(0)
             self.y1.pop(0)
@@ -173,18 +173,24 @@ class animate():
             self.dump()
             self.data_list = []
             self.save_counter += 1
-
         self.y0.append(self.data_array[1])
         self.y1.append(self.data_array[2])
         self.y2.append(self.data_array[3])
         self.y3.append(self.data_array[4])
         self.y4.append(self.data_array[5])
         self.y5.append(self.data_array[6])
-        self.p.append(np.random.sample()*10)
+        self.p.append(10)
         
         self.x.append(time.time()-self.start)
+        #self.x.append(self.data_array[0])
+
         if self.global_counter > 1:
             self.ax0.set_xlim([self.x[0],self.x[-1]+0.5])
+            self.ax1.set_xlim([self.x[0],self.x[-1]+0.5])
+            self.ax2.set_xlim([self.x[0],self.x[-1]+0.5])
+            self.ax3.set_xlim([self.x[0],self.x[-1]+0.5])
+            self.ax4.set_xlim([self.x[0],self.x[-1]+0.5])
+            self.ax5.set_xlim([self.x[0],self.x[-1]+0.5])
 
         x = self.x
         y0 = self.y0
@@ -203,12 +209,15 @@ class animate():
         self.line1.set_data(x, y1)
         self.line2.set_data(x, y2)
         self.line3.set_data(x, y3)
-        self.line4.set_data(x, y4)
-        self.line5.set_data(x, y5)
-        self.line6.set_data(x, p)
-        self.line7.set_data(x, p)
-        self.line8.set_data(x, p)
-        self.line9.set_data(x, p)
+
+        self.line4.set_data(x, y0)
+        self.line5.set_data(x, y1)
+        self.line6.set_data(x, y2)
+        self.line7.set_data(x, y3)
+
+        self.line8.set_data(x, y0)
+        self.line9.set_data(x, y0)
+
         self.line10.set_data(x, p)
         self.line11.set_data(x, p)
         self.line12.set_data(x, p)
@@ -237,11 +246,11 @@ class animate():
 
 if __name__ == '__main__':
 
-    #HOST = '169.254.115.231'
-    HOST = '127.0.0.1'
+    HOST = '169.254.115.231'
+    #HOST = '127.0.0.1'
     PORT = 6677
 
-    fig, ax = plt.subplots(2, 3, sharex=True, sharey=False, figsize=(20, 20))
+    fig, ax = plt.subplots(2, 3, sharex=False, sharey=False, figsize=(20, 20))
     fig.set_tight_layout(True)
     a = animate(fig, ax, HOST, PORT)
     thread = threading.Thread(target=a.data_stream)
