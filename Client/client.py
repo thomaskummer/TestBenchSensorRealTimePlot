@@ -23,8 +23,7 @@ class Client(object):
             while True:
                 data = []
                 t = time.time() - start
-                data.append(t)
-                if t >= 20.0:
+                if t >= 100:
                     start = time.time()
                     t = time.time() - start
                 data.append(t)
@@ -33,17 +32,17 @@ class Client(object):
                     self.i2c_sw.chn(i)
                     sensor = self.i2c_sw.get_mmhg(self.i2c_sw.get_data())
                     data.append(sensor)
-                    time.sleep(0.001)
-                    s.sendall(pickle.dumps(data))
+                    time.sleep(0.005)
+                s.sendall(pickle.dumps(data))
 
 
 if __name__ == '__main__':
-
+    time.sleep(5)
     address_muliplexer = 0x70
     address_sensor = 0x28
     i2c_switch = I2C_SW("I2C switch 0", address_muliplexer, 1, address_sensor)
     HOST = '169.254.115.231'  # The server's hostname or IP address
-    PORT = 6677
+    PORT = 6676
 
     C = Client(address_muliplexer,address_sensor,6,HOST,PORT,i2c_switch)
     C.client()
