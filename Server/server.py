@@ -1,13 +1,26 @@
-#!/usr/bin/env python3
 import numpy as np
 from matplotlib import pyplot as plt
 from matplotlib import animation
+import matplotlib
+
 import time
 import csv
 import pickle
 import threading
 import socket
 from datetime import datetime
+
+def move_figure(f, x, y):
+    """Move figure's upper left corner to pixel (x, y)"""
+    backend = matplotlib.get_backend()
+    if backend == 'TkAgg':
+        f.canvas.manager.window.wm_geometry("+%d+%d" % (x, y))
+    elif backend == 'WXAgg':
+        f.canvas.manager.window.SetPosition((x, y))
+    else:
+        # This works for QT and GTK
+        # You can also use window.setGeometry
+        f.canvas.manager.window.move(x, y)
 
 
 class animate():
@@ -248,10 +261,13 @@ if __name__ == '__main__':
 
     HOST = '169.254.115.231'
     #HOST = '127.0.0.1'
-    PORT = 6677
+    PORT = 6676
 
     fig, ax = plt.subplots(2, 3, sharex=False, sharey=False, figsize=(20, 20))
     fig.set_tight_layout(True)
+    move_figure(fig, 0, 0)
+
+
     a = animate(fig, ax, HOST, PORT)
     thread = threading.Thread(target=a.data_stream)
     thread.deamon = False
