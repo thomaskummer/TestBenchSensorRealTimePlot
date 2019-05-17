@@ -30,7 +30,7 @@ class Client(object):
                     t = time.time() - start
                 data.append(t)
 
-                for i in range(0,7):
+                for i in range(0,8):
                     self.i2c_sw.chn(i)
                     sensor = self.i2c_sw.get_mmhg(self.i2c_sw.get_data())
                     data.append(sensor)
@@ -42,7 +42,7 @@ class Client(object):
                     data.append(sensor2)
                    # time.sleep(0.005)
                 self.i2c_sw2._rst()
-                for i in range(4,8):
+                for i in range(6,8):
                     self.i2c_sw3.chn(i)
                     sensor3 = self.i2c_sw3.get_mmhg_underpressure(self.i2c_sw3.get_data())
                     data.append(sensor3)
