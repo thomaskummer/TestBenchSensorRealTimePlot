@@ -25,7 +25,7 @@ class Client(object):
             while True:
                 data = []
                 t = time.time() - start
-                if t >= 100:
+                if t >= 10000:
                     start = time.time()
                     t = time.time() - start
                 data.append(t)
@@ -46,6 +46,7 @@ class Client(object):
                     self.i2c_sw3.chn(i)
                     sensor3 = self.i2c_sw3.get_mmhg_underpressure(self.i2c_sw3.get_data())
                     data.append(sensor3)
+                time.sleep(0.01)
                 self.i2c_sw3._rst()
                 s.sendall(pickle.dumps(data))
 
