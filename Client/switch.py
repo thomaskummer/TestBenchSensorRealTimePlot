@@ -59,16 +59,24 @@ class I2C_SW(object):
 if __name__ == '__main__':
     # How long does it take to read out all sensors once?
     SW = I2C_SW('I2C switch 0', 0X70, 1, 0x28)
-    nb_sensors = 6
+    SW2 = I2C_SW('I2C switch 1', 0x72,1,0x28)
+    nb_sensors = 8
     pressure_list = []
 
     start = time.time()
     for i in range(nb_sensors):
         SW.chn(i)
         output = SW.get_data()
-        pressure_list.append(SW.get_mmhg(output))
+        print(SW.get_mmhg(output))
+
+    print("*****************")
+    SW._rst()
+    for i in range(nb_sensors):
+        SW2.chn(i)
+        print(SW2.get_mmhg(SW2.get_data()))
+    SW2._rst()
 
     time_ = time.time() - start
     print("Successfully read every sensor")
-    print(time)
+    print(time_)
 
