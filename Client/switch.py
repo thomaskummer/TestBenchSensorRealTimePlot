@@ -55,20 +55,42 @@ class I2C_SW(object):
         mmhg = psi*51.71493256
         return mmhg
 
+    def get_mmhg_underpressure(self,output):
+        output_min = 1638.0
+        output_max = 14746.0
+        pressure_max = 15.0 
+        pressure_min = -15.0
+        psi = (output-output_min)*(pressure_max - pressure_min)/(output_max-output_min) + pressure_min
+        return psi * 51.71493256
+
 
 if __name__ == '__main__':
     # How long does it take to read out all sensors once?
     SW = I2C_SW('I2C switch 0', 0X70, 1, 0x28)
-    nb_sensors = 6
+    SW2 = I2C_SW('I2C switch 1', 0x71,1,0x28)
+    SW3 = I2C_SW('I2C switch 2',0x72,1,0x68)
+    nb_sensors = 8
     pressure_list = []
 
     start = time.time()
     for i in range(nb_sensors):
         SW.chn(i)
         output = SW.get_data()
-        pressure_list.append(SW.get_mmhg(output))
+        print(SW.get_mmhg(output))
+
+    print("*****************")
+    SW._rst()
+    for i in range(4):
+        SW2.chn(i)
+        print(SW2.get_mmhg(SW2.get_data()))
+    SW2._rst()
+    print("*****************")
+    for i in range(4,8):
+        SW3.chn(i)
+        print(SW3.get_mmhg_underpressure(SW3.get_data()))
+    SW3._rst()
 
     time_ = time.time() - start
     print("Successfully read every sensor")
-    print(time)
+    print(time_)
 
