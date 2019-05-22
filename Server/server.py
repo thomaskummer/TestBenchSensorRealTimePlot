@@ -90,23 +90,25 @@ class animate():
         self.line1, = self.ax0.plot([], [], label="aorta", c='black', lw=2)
         self.line2, = self.ax0.plot([], [], label="pulm. vein", c="green", lw=2)
         self.line3, = self.ax0.plot([], [], label="compl. cha.", c='red', lw=2)
+        self.line4, = self.ax0.plot([], [], label="compl. cha. water", c='yellow', lw=2)
         # 2
-        self.line4, = self.ax1.plot([], [], label="rv", c='blue', lw=2)
-        self.line5, = self.ax1.plot([], [], label="pulm. art.", c='black', lw=2)
-        self.line6, = self.ax1.plot([], [], label="vena cava", c='green', lw=2)
-        self.line7, = self.ax1.plot([], [], label="compl. cha.", c='red', lw=2)
+        self.line5, = self.ax1.plot([], [], label="rv", c='blue', lw=2)
+        self.line6, = self.ax1.plot([], [], label="pulm. art.", c='black', lw=2)
+        self.line7, = self.ax1.plot([], [], label="vena cava", c='green', lw=2)
+        self.line8, = self.ax1.plot([], [], label="compl. cha.", c='red', lw=2)
+        self.line9, = self.ax1.plot([], [], label="compl. cha. water", c='yellow', lw=2)
         # 3
-        self.line8, = self.ax2.plot([], [], label="patch 1", c='blue', lw=2)
-        self.line9, = self.ax2.plot([], [], label="patch 2", c='black', lw=2)
+        self.line10, = self.ax2.plot([], [], label="patch 1", c='blue', lw=2)
+        self.line11, = self.ax2.plot([], [], label="patch 2", c='black', lw=2)
         # 4
-        self.line10, = self.ax3.plot([], [], label="aortic valve", c="green", lw=2)
-        self.line11, = self.ax3.plot([], [], label="mitral valve", c='blue', lw=2)
+        self.line12, = self.ax3.plot([], [], label="aortic valve", c="green", lw=2)
+        self.line13, = self.ax3.plot([], [], label="mitral valve", c='blue', lw=2)
         # 5
-        self.line12, = self.ax4.plot([], [], label="pulm. valve", c='black', lw=2)
-        self.line13, = self.ax4.plot([], [], label="tricusp. valve", c='green', lw=2)
+        self.line14, = self.ax4.plot([], [], label="pulm. valve", c='black', lw=2)
+        self.line15, = self.ax4.plot([], [], label="tricusp. valve", c='green', lw=2)
         # 6
-        self.line14, = self.ax5.plot([], [], label="lv", c='black', lw=2)
-        self.line15, = self.ax5.plot([], [], label="rv", c='green', lw=2)
+        self.line16, = self.ax5.plot([], [], label="lv", c='black', lw=2)
+        self.line17, = self.ax5.plot([], [], label="rv", c='green', lw=2)
 
         self.ax0.legend(loc='upper right')
         self.ax1.legend(loc='upper right')
@@ -120,11 +122,19 @@ class animate():
         self.y0 = []
         self.y1 = []
         self.y2 = []
-        self.data_array = np.array([0,0,0,0,0,0,0])
+        self.data_array = np.array([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0])
         self.data_list = []
         self.y3 = []
         self.y4 = []
         self.y5 = []
+        self.y6 = []
+        self.y7 = []
+        self.y8 = []
+        self.y9 = []
+        self.y10 = []
+        self.y11 = []
+        self.y12 = []
+        self.y13 = []
         self.p = []
 
         self.time = []
@@ -163,8 +173,10 @@ class animate():
         self.line13.set_data([], [])
         self.line14.set_data([], [])
         self.line15.set_data([], [])
+        self.line16.set_data([], [])
+        self.line16.set_data([], [])
 
-        return self.line, self.line1, self.line2, self.line3, self.line4, self.line5, self.line6, self.line7, self.line8, self.line9, self.line10, self.line11, self.line12, self.line13, self.line14, self.line15,
+        return self.line, self.line1, self.line2, self.line3, self.line4, self.line5, self.line6, self.line7, self.line8, self.line9, self.line10, self.line11, self.line12, self.line13, self.line14, self.line15, self.line16, self.line17, 
 
     def get_data(self, i):
         if (time.time()-self.start)>self.T_end:
@@ -177,6 +189,15 @@ class animate():
             self.y3.pop(0)
             self.y4.pop(0)
             self.y5.pop(0)
+            self.y6.pop(0)
+            self.y7.pop(0)
+            self.y8.pop(0)
+            self.y9.pop(0)
+            self.y10.pop(0)
+            self.y11.pop(0)
+            self.y12.pop(0)
+            self.y13.pop(0)
+
             self.p.pop(0)
 
         if int(self.start_save) == 1:
@@ -192,7 +213,16 @@ class animate():
         self.y3.append(self.data_array[4])
         self.y4.append(self.data_array[5])
         self.y5.append(self.data_array[6])
-        self.p.append(10)
+        self.y6.append(self.data_array[7])
+        self.y7.append(self.data_array[8])
+        self.y8.append(self.data_array[9])
+        self.y9.append(self.data_array[10])
+        self.y10.append(self.data_array[11])
+        self.y11.append(self.data_array[12])
+        self.y12.append(self.data_array[13])
+        self.y13.append(self.data_array[14])
+
+        self.p.append(np.random.sample(1)*10.0)
         
         self.x.append(time.time()-self.start)
         #self.x.append(self.data_array[0])
@@ -212,33 +242,48 @@ class animate():
         y3 = self.y3
         y4 = self.y4
         y5 = self.y5
+        y6 = self.y6
+        y7 = self.y7
+        y8 = self.y8
+        y9 = self.y9
+        y10 = self.y10
+        y11 = self.y11
+        y12 = self.y12
+        y13 = self.y13
+
         p = self.p
 
-        return x, y0, y1, y2, y3, y4, y5, p,
+        return x, y0, y1, y2, y3, y4, y5, y6, y7 , y8 ,y9 ,y10 ,y11 ,y12 ,y13 ,p,
     
     def animate(self, i):
-        x, y0, y1, y2, y3, y4, y5, p = self.get_data(i)
+        x, y0, y1, y2, y3, y4, y5, y6, y7 , y8 ,y9 ,y10 ,y11 ,y12 ,y13 ,p = self.get_data(i)
         self.line.set_data(x, y0)
         self.line1.set_data(x, y1)
         self.line2.set_data(x, y2)
         self.line3.set_data(x, y3)
+        self.line4.set_data(x, y4)
 
-        self.line4.set_data(x, y0)
-        self.line5.set_data(x, y1)
-        self.line6.set_data(x, y2)
-        self.line7.set_data(x, y3)
+        self.line5.set_data(x, y5)
+        self.line6.set_data(x, y6)
+        self.line7.set_data(x, y7)
+        self.line8.set_data(x, y8)
+        self.line9.set_data(x, y9)
 
-        self.line8.set_data(x, y0)
-        self.line9.set_data(x, y0)
+        self.line10.set_data(x, y12)
+        self.line11.set_data(x, y13)
 
-        self.line10.set_data(x, p)
-        self.line11.set_data(x, p)
-        self.line12.set_data(x, p)
-        self.line13.set_data(x, p)
-        self.line14.set_data(x, p)
+        self.line11.set_data(x, y10)
+        self.line12.set_data(x, y10)
+
+        self.line13.set_data(x, y11)
+        self.line14.set_data(x, y11)
+
         self.line15.set_data(x, p)
+        self.line16.set_data(x, p)
 
-        return self.line, self.line1, self.line2, self.line3, self.line4, self.line5, self.line6, self.line7, self.line8, self.line9, self.line10, self.line11, self.line12, self.line13, self.line14, self.line15,
+
+
+        return self.line, self.line1, self.line2, self.line3, self.line4, self.line5, self.line6, self.line7, self.line8, self.line9, self.line10, self.line11, self.line12, self.line13, self.line14, self.line15, self.line16, self.line17, 
     
     def dump(self):
         date = "output_{}.csv".format(datetime.now().strftime('%Y%b%d_%H%M%S'))
