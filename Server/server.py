@@ -59,7 +59,7 @@ class animate():
         self.ax2 = ax[0, 2]
         self.ax2.set_title("Patch vacuum",fontsize=15)
         self.ax2.set_xlim([0, self.T_end+0.5])
-        self.ax2.set_ylim([-1, 0])
+        self.ax2.set_ylim([-1, 0.01])
         self.ax2.set_ylabel("pressure [bar]", fontsize=15)
         self.ax2.set_xlabel("time [s]", fontsize=15)
 
@@ -90,13 +90,13 @@ class animate():
         self.line1, = self.ax0.plot([], [], label="aorta", c='black', lw=2)
         self.line2, = self.ax0.plot([], [], label="pulm. vein", c="green", lw=2)
         self.line3, = self.ax0.plot([], [], label="compl. cha.", c='red', lw=2)
-        self.line4, = self.ax0.plot([], [], label="compl. cha. water", c='yellow', lw=2)
+        self.line4, = self.ax0.plot([], [], label="compl. cha. water", lw=2)
         # 2
         self.line5, = self.ax1.plot([], [], label="rv", c='blue', lw=2)
         self.line6, = self.ax1.plot([], [], label="pulm. art.", c='black', lw=2)
         self.line7, = self.ax1.plot([], [], label="vena cava", c='green', lw=2)
         self.line8, = self.ax1.plot([], [], label="compl. cha.", c='red', lw=2)
-        self.line9, = self.ax1.plot([], [], label="compl. cha. water", c='yellow', lw=2)
+        self.line9, = self.ax1.plot([], [], label="compl. cha. water", lw=2)
         # 3
         self.line10, = self.ax2.plot([], [], label="patch 1", c='blue', lw=2)
         self.line11, = self.ax2.plot([], [], label="patch 2", c='black', lw=2)
@@ -224,8 +224,8 @@ class animate():
 
         self.p.append(np.random.sample(1)*10.0)
         
-        self.x.append(time.time()-self.start)
-        #self.x.append(self.data_array[0])
+        #self.x.append(time.time()-self.start)
+        self.x.append(self.data_array[0])
 
         if self.global_counter > 1:
             self.ax0.set_xlim([self.x[0],self.x[-1]+0.5])
@@ -272,14 +272,14 @@ class animate():
         self.line10.set_data(x, y12)
         self.line11.set_data(x, y13)
 
-        self.line11.set_data(x, y10)
         self.line12.set_data(x, y10)
+        self.line13.set_data(x, y10)
 
-        self.line13.set_data(x, y11)
         self.line14.set_data(x, y11)
+        self.line15.set_data(x, y11)
 
-        self.line15.set_data(x, p)
         self.line16.set_data(x, p)
+        self.line17.set_data(x, p)
 
 
 
