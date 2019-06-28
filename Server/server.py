@@ -12,6 +12,7 @@ from datetime import datetime
 
 def move_figure(f, x, y):
     """Move figure's upper left corner to pixel (x, y)"""
+	# move figure to upper screen
     backend = matplotlib.get_backend()
     if backend == 'TkAgg':
         f.canvas.manager.window.wm_geometry("+%d+%d" % (x, y))
@@ -31,15 +32,16 @@ class animate():
         self.host = host
         self.port = port
 
-        self.T_end = 10
-        self.fig = fig
+        self.T_end = 10 # t-axis length
+        self.fig = fig # make public
         self.P_max = 150
         self.global_counter = 0
         self.global_time = []
         self.start_save = 0
         self.save_counter = 0
 
-        # 1
+	# Only create empty plots/axes
+        # Plot 1
         self.ax0 = ax[0, 0]
         self.ax0.set_title("Left Ventricle", fontsize=15)
         self.ax0.set_xlim([0, self.T_end+0.5])
@@ -85,6 +87,7 @@ class animate():
         self.ax5.set_ylabel("pressure [mmhg]", fontsize=15)
         self.ax5.set_xlabel("volume [ml]", fontsize=15)
 
+	# Plug in empty data into plots
         # 1
         self.line, = self.ax0.plot([], [], label="lv", c='blue', lw=2)
         self.line1, = self.ax0.plot([], [], label="aorta", c='black', lw=2)
@@ -109,7 +112,9 @@ class animate():
         # 6
         self.line16, = self.ax5.plot([], [], label="lv", c='black', lw=2)
         self.line17, = self.ax5.plot([], [], label="rv", c='green', lw=2)
+# 1) add here line 18
 
+	# legend location
         self.ax0.legend(loc='upper right')
         self.ax1.legend(loc='upper right')
         self.ax2.legend(loc='upper right')
@@ -117,7 +122,7 @@ class animate():
         self.ax4.legend(loc='upper right')
         self.ax5.legend(loc='upper right')
 
-
+	# create empty lists for data from raspi
         self.x = []
         self.y0 = []
         self.y1 = []
@@ -136,12 +141,14 @@ class animate():
         self.y12 = []
         self.y13 = []
         self.p = []
+# 2) add here e.g. self.y14
 
         self.time = []
         self.start = time.time()
 
         self.j = 0
 
+    # 
     def data_stream(self):
         with socket.socket(socket.AF_INET,socket.SOCK_STREAM) as s:
             s.bind((self.host, self.port))
@@ -153,9 +160,12 @@ class animate():
                     data = conn.recv(1024)
                     if not data:
                         break
+		    # reading data dumped by sendall function of client
                     self.data_array = pickle.loads(data)
 
     # initialization function: plot the background of each frame
+    # no constructor
+    # emtpy lines for animation class
     def init(self):
         self.line.set_data([], [])
         self.line1.set_data([], [])
@@ -174,9 +184,11 @@ class animate():
         self.line14.set_data([], [])
         self.line15.set_data([], [])
         self.line16.set_data([], [])
-        self.line16.set_data([], [])
+        self.line17.set_data([], [])
+# 3) add self.line18...
 
         return self.line, self.line1, self.line2, self.line3, self.line4, self.line5, self.line6, self.line7, self.line8, self.line9, self.line10, self.line11, self.line12, self.line13, self.line14, self.line15, self.line16, self.line17, 
+# 4) return line 18
 
     def get_data(self, i):
         if (time.time()-self.start)>self.T_end:
@@ -197,17 +209,22 @@ class animate():
             self.y11.pop(0)
             self.y12.pop(0)
             self.y13.pop(0)
-
+# 5) y14.pop
             self.p.pop(0)
 
+	# 1 for start save
         if int(self.start_save) == 1:
             self.data_list.append(self.data_array)
             self.save_counter = 0
+
+	# 2 for end save
         if int(self.start_save) == 2 and self.save_counter == 0:
             self.dump()
             self.data_list = []
             self.save_counter += 1
-        self.y0.append(self.data_array[1])
+
+	# append new data from sensors
+        self.y0.append(self.data_array[1]) # front side of box
         self.y1.append(self.data_array[2])
         self.y2.append(self.data_array[3])
         self.y3.append(self.data_array[4])
@@ -215,18 +232,22 @@ class animate():
         self.y5.append(self.data_array[6])
         self.y6.append(self.data_array[7])
         self.y7.append(self.data_array[8])
-        self.y8.append(self.data_array[9])
+        self.y8.append(self.data_array[9]) # back
         self.y9.append(self.data_array[10])
         self.y10.append(self.data_array[11])
         self.y11.append(self.data_array[12])
-        self.y12.append(self.data_array[13])
+        self.y12.append(self.data_array[13]) # under p. sensors
         self.y13.append(self.data_array[14])
+# 6) self.y14...
 
+	# random data for p-v-loop
         self.p.append(np.random.sample(1)*10.0)
         
         #self.x.append(time.time()-self.start)
+	# x=time
         self.x.append(self.data_array[0])
 
+	# axes limits, change with moving time
         if self.global_counter > 1:
             self.ax0.set_xlim([self.x[0],self.x[-1]+0.5])
             self.ax1.set_xlim([self.x[0],self.x[-1]+0.5])
@@ -235,6 +256,7 @@ class animate():
             self.ax4.set_xlim([self.x[0],self.x[-1]+0.5])
             self.ax5.set_xlim([self.x[0],self.x[-1]+0.5])
 
+	# copy to other variables, returning into emtpy lines
         x = self.x
         y0 = self.y0
         y1 = self.y1
@@ -250,13 +272,19 @@ class animate():
         y11 = self.y11
         y12 = self.y12
         y13 = self.y13
+# 7) self.y14
 
         p = self.p
 
         return x, y0, y1, y2, y3, y4, y5, y6, y7 , y8 ,y9 ,y10 ,y11 ,y12 ,y13 ,p,
-    
+# 8) return y14    
+
+    # get data from above
     def animate(self, i):
         x, y0, y1, y2, y3, y4, y5, y6, y7 , y8 ,y9 ,y10 ,y11 ,y12 ,y13 ,p = self.get_data(i)
+# 9) y14
+
+	# eventually write data to plots
         self.line.set_data(x, y0)
         self.line1.set_data(x, y1)
         self.line2.set_data(x, y2)
@@ -280,18 +308,22 @@ class animate():
 
         self.line16.set_data(x, p)
         self.line17.set_data(x, p)
-
+# 10) self.line18.set_data(x, y14)
 
 
         return self.line, self.line1, self.line2, self.line3, self.line4, self.line5, self.line6, self.line7, self.line8, self.line9, self.line10, self.line11, self.line12, self.line13, self.line14, self.line15, self.line16, self.line17, 
+# 11) line18
     
+    # dump file for saving with buttons 1 and 2
     def dump(self):
         date = "output_{}.csv".format(datetime.now().strftime('%Y%b%d_%H%M%S'))
         with open(date, 'w') as outcsv: #change 'w' to 'a' if we just want to append
             #configure writer to write standard csv file
             writer = csv.writer(outcsv, delimiter=',', quoting=csv.QUOTE_MINIMAL)
             writer.writerow(['Time', 'Sensor0', 'Sensor1','Sensor2','Sensor3','Sensor4','Sensor5'])
-                
+
+# 12) export sensor ...
+
             for item in self.data_list:
                 #Write item to outcsv
                 writer.writerow([item[0],item[1],item[2],item[3],item[4],item[5],item[6]])
@@ -301,27 +333,34 @@ class animate():
         while True:
             self.start_save = input()
 
+# 13) open sensors in client.py
+
 
 if __name__ == '__main__':
 
-    HOST = '169.254.115.231'
+    HOST = '169.254.115.231' #ip raspi
     #HOST = '127.0.0.1'
     PORT = 6676
-
+	
+#subplotsh
     fig, ax = plt.subplots(2, 3, sharex=False, sharey=False, figsize=(20, 20))
     fig.set_tight_layout(True)
     move_figure(fig, 0, 0)
 
-
+# initialize animate object
     a = animate(fig, ax, HOST, PORT)
+# thread for plotting and thread for comunicating with raspi
     thread = threading.Thread(target=a.data_stream)
     thread.deamon = False
     thread.start()
 
+# thread raspi
     thread2 = threading.Thread(target=a.save)
     thread2.deamon = False
     thread2.start()
 
     print("Start client")
+
+# plug animate object a into matplotlib animation object
     anim = animation.FuncAnimation(fig, a.animate, init_func=a.init, interval=10, blit=True)
     plt.show()

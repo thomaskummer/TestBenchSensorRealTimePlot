@@ -36,6 +36,7 @@ class I2C_SW(object):
         """Read all 8 channels"""
         self.bus.write_byte(self.address,0Xff)
 
+# get raw data from sensor with function from sensor manuel
     def get_data(self):
         """Get the raw data of the Sensor"""
         # sends i2c address & read bit, returns two 8 bit bytes as lsb, msb
