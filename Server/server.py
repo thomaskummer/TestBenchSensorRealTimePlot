@@ -61,14 +61,14 @@ class animate():
         self.ax2 = ax[0, 2]
         self.ax2.set_title("Patch vacuum",fontsize=15)
         self.ax2.set_xlim([0, self.T_end+0.5])
-        self.ax2.set_ylim([-1, 0.01])
+        self.ax2.set_ylim([-0.2, 0.2])
         self.ax2.set_ylabel("pressure [bar]", fontsize=15)
         self.ax2.set_xlabel("time [s]", fontsize=15)
 
         # 4
         self.ax3 = ax[1, 0]
         self.ax3.set_xlim([0, self.T_end+0.5])
-        self.ax3.set_ylim([-200, 800])
+        self.ax3.set_ylim([-20, 300])
         self.ax3.set_ylabel("flow rate [ml/s]", fontsize=15)
         self.ax3.set_xlabel("time [s]", fontsize=15)
 
@@ -222,12 +222,18 @@ class animate():
             self.dump()
             self.data_list = []
             self.save_counter += 1
-
+        d1 = 0.020
+        d2 = 0.010
+        constant = (np.pi**2/(8.0*1000.0))/(1.0/d2**4-1.0/d1**4)
 	# append new data from sensors
         self.y0.append(self.data_array[1]) # front side of box
         self.y1.append(self.data_array[2])
         self.y2.append(self.data_array[3])
-        self.y3.append(self.data_array[4])
+        self.y3.append(np.sqrt(np.abs(self.data_array[1])*101325/760*constant)*1000000.0)
+        #print(np.sqrt((self.data_array[4])*101325/760*constant)*1000000.0)
+        #print(np.sqrt(np.abs(self.data_array[1]-self.data_array[2])*101325/760*constant)*1000000.0)
+
+
         self.y4.append(self.data_array[5])
         self.y5.append(self.data_array[6])
         self.y6.append(self.data_array[7])
@@ -236,8 +242,8 @@ class animate():
         self.y9.append(self.data_array[10])
         self.y10.append(self.data_array[11])
         self.y11.append(self.data_array[12])
-        self.y12.append(self.data_array[13]) # under p. sensors
-        self.y13.append(self.data_array[14])
+        self.y12.append(((np.abs(self.data_array[11]-self.data_array[12]))*100000*constant)*1000000.0) 
+        self.y13.append(self.data_array[1])
 # 6) self.y14...
 
 	# random data for p-v-loop
@@ -297,11 +303,11 @@ class animate():
         self.line8.set_data(x, y8)
         self.line9.set_data(x, y9)
 
-        self.line10.set_data(x, y12)
-        self.line11.set_data(x, y13)
+        self.line10.set_data(x, y10) #(x,y12)
+        self.line11.set_data(x, y11) #(x,y13)
 
-        self.line12.set_data(x, y10)
-        self.line13.set_data(x, y10)
+        self.line12.set_data(x, y3)
+        self.line13.set_data(x, y12)
 
         self.line14.set_data(x, y11)
         self.line15.set_data(x, y11)
@@ -345,7 +351,7 @@ if __name__ == '__main__':
 #subplotsh
     fig, ax = plt.subplots(2, 3, sharex=False, sharey=False, figsize=(20, 20))
     fig.set_tight_layout(True)
-    move_figure(fig, 0, 0)
+    #move_figure(fig, 0, 0)
 
 # initialize animate object
     a = animate(fig, ax, HOST, PORT)
