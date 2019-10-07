@@ -127,7 +127,7 @@ class animate():
         self.y0 = []
         self.y1 = []
         self.y2 = []
-        self.data_array = np.array([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0])
+        self.data_array = np.array([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0])
         self.data_list = []
         self.y3 = []
         self.y4 = []
@@ -226,24 +226,25 @@ class animate():
         d2 = 0.010
         constant = (np.pi**2/(8.0*1000.0))/(1.0/d2**4-1.0/d1**4)
 	# append new data from sensors
-        self.y0.append(self.data_array[1]) # front side of box
+        self.y0.append(self.data_array[1])
         self.y1.append(self.data_array[2])
         self.y2.append(self.data_array[3])
-        self.y3.append(np.sqrt(np.abs(self.data_array[1])*101325/760*constant)*1000000.0)
-        #print(np.sqrt((self.data_array[4])*101325/760*constant)*1000000.0)
-        #print(np.sqrt(np.abs(self.data_array[1]-self.data_array[2])*101325/760*constant)*1000000.0)
+        self.y3.append(self.data_array[4])
+        self.y4.append(self.data_array[12])
+
+        self.y5.append(self.data_array[11])
+        self.y6.append(self.data_array[5])
+        self.y7.append(self.data_array[6])
+        self.y12.append(self.data_array[13]) 
+        self.y13.append(self.data_array[14])
+
+        self.y8.append(np.sqrt(np.abs(self.data_array[9])*101325/760*constant)*1000000.0-25)
+        self.y9.append(np.sqrt(np.abs(self.data_array[10])*101325/760*constant)*1000000.0)
+        self.y10.append(self.data_array[15])
+        self.y11.append(self.data_array[16])
 
 
-        self.y4.append(self.data_array[5])
-        self.y5.append(self.data_array[6])
-        self.y6.append(self.data_array[7])
-        self.y7.append(self.data_array[8])
-        self.y8.append(self.data_array[9]) # back
-        self.y9.append(self.data_array[10])
-        self.y10.append(self.data_array[11])
-        self.y11.append(self.data_array[12])
-        self.y12.append(((np.abs(self.data_array[11]-self.data_array[12]))*100000*constant)*1000000.0) 
-        self.y13.append(self.data_array[1])
+
 # 6) self.y14...
 
 	# random data for p-v-loop
@@ -300,14 +301,15 @@ class animate():
         self.line5.set_data(x, y5)
         self.line6.set_data(x, y6)
         self.line7.set_data(x, y7)
-        self.line8.set_data(x, y8)
-        self.line9.set_data(x, y9)
+        self.line8.set_data(x, y12)
+        self.line9.set_data(x, y13)
 
         self.line10.set_data(x, y10) #(x,y12)
         self.line11.set_data(x, y11) #(x,y13)
 
-        self.line12.set_data(x, y3)
-        self.line13.set_data(x, y12)
+        #flow
+        self.line12.set_data(x, y8)
+        self.line13.set_data(x, y9)
 
         self.line14.set_data(x, y11)
         self.line15.set_data(x, y11)
