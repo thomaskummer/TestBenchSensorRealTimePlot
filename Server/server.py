@@ -34,7 +34,7 @@ class animate():
 
         self.T_end = 10 # t-axis length
         self.fig = fig # make public
-        self.P_max = 150
+        self.P_max = 200
         self.global_counter = 0
         self.global_time = []
         self.start_save = 0
@@ -53,7 +53,7 @@ class animate():
         self.ax1 = ax[0, 1]
         self.ax1.set_title("Right Ventricle", fontsize=15)
         self.ax1.set_xlim([0, self.T_end+0.5])
-        self.ax1.set_ylim([-2, 50])
+        self.ax1.set_ylim([-2, 200])
         self.ax1.set_ylabel("pressure [mmhg]", fontsize=15)
         self.ax1.set_xlabel("time [s]", fontsize=15)
 
@@ -328,13 +328,13 @@ class animate():
         with open(date, 'w') as outcsv: #change 'w' to 'a' if we just want to append
             #configure writer to write standard csv file
             writer = csv.writer(outcsv, delimiter=',', quoting=csv.QUOTE_MINIMAL)
-            writer.writerow(['Time', 'Sensor0', 'Sensor1','Sensor2','Sensor3','Sensor4','Sensor5'])
+            writer.writerow(['Time', 'lv', 'aorta','pulm. vein','compl. cha.','compl. cha. water','rv', 'pulm. art.', 'vena cava', 'compl. cha.', 'compl. cha. water', 'patch 1', 'patch 2', 'aortic valve', 'mitral valve'])
 
 # 12) export sensor ...
 
             for item in self.data_list:
                 #Write item to outcsv
-                writer.writerow([item[0],item[1],item[2],item[3],item[4],item[5],item[6]])
+                writer.writerow([item[0],item[1],item[2],item[3],item[4],item[12], item[11],item[5],item[6],item[13],item[14], item[15], item[16], 1,1])
         print("Data saved to {}!".format(date))
 
     def save(self):
