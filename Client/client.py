@@ -55,13 +55,6 @@ class Client(object):
                 time.sleep(0.05)
                 self.i2c_sw3._rst()
                 s.sendall(pickle.dumps(data))
-		# 2nd board 0 bis 3 sw2
-                for i in range(4):
-                    self.i2c_sw2.chn(i)
-                    sensor2 = self.i2c_sw2.get_mmhg(self.i2c_sw2.get_data())
-                    data.append(sensor2)
-                   # time.sleep(0.005)
-                self.i2c_sw2._rst()
 
 if __name__ == '__main__':
     time.sleep(5)
