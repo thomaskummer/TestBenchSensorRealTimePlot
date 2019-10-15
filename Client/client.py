@@ -37,25 +37,49 @@ class Client(object):
                     data.append(sensor)
                    # time.sleep(0.005)
                 self.i2c_sw._rst()
-
-		# 2nd board 0 bis 3 sw2
-                for i in range(4):
+                for i in range(0,2):#4
+                    self.i2c_sw2.chn(i)
+                    sensor2 = self.i2c_sw2.get_mmhg2(self.i2c_sw2.get_data())
+                    data.append(sensor2)
+                   # time.sleep(0.005)
+                #self.i2c_sw2._rst()
+                for i in range(2,6):
                     self.i2c_sw2.chn(i)
                     sensor2 = self.i2c_sw2.get_mmhg(self.i2c_sw2.get_data())
                     data.append(sensor2)
-                   # time.sleep(0.005)
                 self.i2c_sw2._rst()
-
-		# 3rd board 6 bis 7 sw3 under pressure
-                for i in range(6,8):
+                for i in range(6,8):#6,8
                     self.i2c_sw3.chn(i)
                     sensor3 = self.i2c_sw3.get_mmhg_underpressure(self.i2c_sw3.get_data())
                     data.append(sensor3)
-                time.sleep(0.01)
+                time.sleep(0.05)
                 self.i2c_sw3._rst()
+                s.sendall(pickle.dumps(data))
+
+#if __name__ == '__main__':
+#    time.sleep(5)
+#    address_multiplexer = 0x70
+#    address_multiplexer2 = 0x71
+#    address_multiplexer3 = 0x72
+#    address_sensor = 0x28
+#    address_sensor2 = 0x68
+#    i2c_switch = I2C_SW("I2C switch 0", address_multiplexer, 1, address_sensor)
+#    i2c_switch2 = I2C_SW("I2C switch 1", address_multiplexer2,1,address_sensor)
+#    i2c_switch3 = I2C_SW("I2C switch 2",address_multiplexer3,1,address_sensor2)
+#    HOST = '169.254.115.231'  # The server's hostname or IP address
+#    PORT = 6676
+
+#    C = Client(address_multiplexer,address_sensor,6,HOST,PORT,i2c_switch,i2c_switch2,i2c_switch3)
+		# 3rd board 6 bis 7 sw3 under pressure
+#                for i in range(6,8):
+#                    self.i2c_sw3.chn(i)
+#                    sensor3 = self.i2c_sw3.get_mmhg_underpressure(self.i2c_sw3.get_data())
+#                    data.append(sensor3)
+#                time.sleep(0.01)
+#                self.i2c_sw3._rst()
 
 		# send data to server (lenovo) (pickle = binary)
-                s.sendall(pickle.dumps(data))
+#                s.sendall(pickle.dumps(data))
 
 
 if __name__ == '__main__':

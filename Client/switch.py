@@ -63,6 +63,14 @@ class I2C_SW(object):
         pressure_min = -15.0
         psi = (output-output_min)*(pressure_max - pressure_min)/(output_max-output_min) + pressure_min
         return psi /14.504
+    
+    def get_mmhg2(self, output):
+        output_min = 1638.0
+        output_max = 14746.0
+        pressure_max = 1.0 
+        pressure_min = -1.0
+        psi = (output-output_min)*(pressure_max-pressure_min)/(output_max-output_min) + pressure_min
+        return psi*51.71493256
 
 
 if __name__ == '__main__':
