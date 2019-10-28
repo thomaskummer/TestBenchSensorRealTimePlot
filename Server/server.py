@@ -31,10 +31,13 @@ class animate():
 
         self.host = host
         self.port = port
+        self.start = time.time()
+        self.volume_left = 140
+        self.volume_right = 140
 
         self.T_end = 10 # t-axis length
         self.fig = fig # make public
-        self.P_max = 200
+        self.P_max = 150
         self.global_counter = 0
         self.global_time = []
         self.start_save = 0
@@ -53,7 +56,7 @@ class animate():
         self.ax1 = ax[0, 1]
         self.ax1.set_title("Right Ventricle", fontsize=15)
         self.ax1.set_xlim([0, self.T_end+0.5])
-        self.ax1.set_ylim([-2, 200])
+        self.ax1.set_ylim([-2, 150])
         self.ax1.set_ylabel("pressure [mmhg]", fontsize=15)
         self.ax1.set_xlabel("time [s]", fontsize=15)
 
@@ -61,14 +64,14 @@ class animate():
         self.ax2 = ax[0, 2]
         self.ax2.set_title("Patch vacuum",fontsize=15)
         self.ax2.set_xlim([0, self.T_end+0.5])
-        self.ax2.set_ylim([-0.2, 0.2])
+        self.ax2.set_ylim([-1, 0.1])
         self.ax2.set_ylabel("pressure [bar]", fontsize=15)
         self.ax2.set_xlabel("time [s]", fontsize=15)
 
         # 4
         self.ax3 = ax[1, 0]
         self.ax3.set_xlim([0, self.T_end+0.5])
-        self.ax3.set_ylim([-20, 300])
+        self.ax3.set_ylim([-200, 800])
         self.ax3.set_ylabel("flow rate [ml/s]", fontsize=15)
         self.ax3.set_xlabel("time [s]", fontsize=15)
 
@@ -81,25 +84,25 @@ class animate():
 
         # 6
         self.ax5 = ax[1, 2]
-        self.ax5.set_title("P-V loop", fontsize=15)
-        self.ax5.set_xlim([50, 150])
-        self.ax5.set_ylim([-2, self.P_max])
-        self.ax5.set_ylabel("pressure [mmhg]", fontsize=15)
-        self.ax5.set_xlabel("volume [ml]", fontsize=15)
+        self.ax5.set_title("Volume", fontsize=15)
+        self.ax5.set_xlim([0, 10])
+        self.ax5.set_ylim([0, 200])
+        self.ax5.set_ylabel("Volume [ml]", fontsize=15)
+        self.ax5.set_xlabel("time [s]", fontsize=15)
 
 	# Plug in empty data into plots
         # 1
-        self.line, = self.ax0.plot([], [], label="lv", c='blue', lw=2)
-        self.line1, = self.ax0.plot([], [], label="aorta", c='black', lw=2)
+        self.line, = self.ax0.plot([], [], label="lv", c='black', lw=2)
+        #self.line1, = self.ax0.plot([], [], label="Test", c='blue', lw=2)
         self.line2, = self.ax0.plot([], [], label="pulm. vein", c="green", lw=2)
-        self.line3, = self.ax0.plot([], [], label="compl. cha.", c='red', lw=2)
-        self.line4, = self.ax0.plot([], [], label="compl. cha. water", lw=2)
+        self.line3, = self.ax0.plot([], [], label="compl. cha. air", c='red', lw=2)
+        self.line4, = self.ax0.plot([], [], label="aorta", lw=2)
         # 2
-        self.line5, = self.ax1.plot([], [], label="rv", c='blue', lw=2)
-        self.line6, = self.ax1.plot([], [], label="pulm. art.", c='black', lw=2)
+        #self.line5, = self.ax1.plot([], [], label="Test", c='blue', lw=2)
+        self.line6, = self.ax1.plot([], [], label="rv", c='black', lw=2)
         self.line7, = self.ax1.plot([], [], label="vena cava", c='green', lw=2)
-        self.line8, = self.ax1.plot([], [], label="compl. cha.", c='red', lw=2)
-        self.line9, = self.ax1.plot([], [], label="compl. cha. water", lw=2)
+        self.line8, = self.ax1.plot([], [], label="compl. cha. air", c='red', lw=2)
+        self.line9, = self.ax1.plot([], [], label="pulm. art.", lw=2)
         # 3
         self.line10, = self.ax2.plot([], [], label="patch 1", c='blue', lw=2)
         self.line11, = self.ax2.plot([], [], label="patch 2", c='black', lw=2)
@@ -110,7 +113,7 @@ class animate():
         self.line14, = self.ax4.plot([], [], label="pulm. valve", c='black', lw=2)
         self.line15, = self.ax4.plot([], [], label="tricusp. valve", c='green', lw=2)
         # 6
-        self.line16, = self.ax5.plot([], [], label="lv", c='black', lw=2)
+        self.line16, = self.ax5.plot([], [],label="lv", c='black', lw=2)
         self.line17, = self.ax5.plot([], [], label="rv", c='green', lw=2)
 # 1) add here line 18
 
@@ -140,6 +143,13 @@ class animate():
         self.y11 = []
         self.y12 = []
         self.y13 = []
+        self.y14 = []
+        self.y15 = []
+        self.y16 = []
+        self.y17 = []
+        self.y18 = []
+        self.y19 = []
+        
         self.p = []
 # 2) add here e.g. self.y14
 
@@ -168,11 +178,11 @@ class animate():
     # emtpy lines for animation class
     def init(self):
         self.line.set_data([], [])
-        self.line1.set_data([], [])
+        #self.line1.set_data([], [])
         self.line2.set_data([], [])
         self.line3.set_data([], [])
         self.line4.set_data([], [])
-        self.line5.set_data([], [])
+        #self.line5.set_data([], [])
         self.line6.set_data([], [])
         self.line7.set_data([], [])
         self.line8.set_data([], [])
@@ -187,13 +197,14 @@ class animate():
         self.line17.set_data([], [])
 # 3) add self.line18...
 
-        return self.line, self.line1, self.line2, self.line3, self.line4, self.line5, self.line6, self.line7, self.line8, self.line9, self.line10, self.line11, self.line12, self.line13, self.line14, self.line15, self.line16, self.line17, 
+        return self.line, self.line2, self.line3, self.line4, self.line6, self.line7, self.line8, self.line9, self.line10, self.line11, self.line12, self.line13, self.line14, self.line15, self.line16, self.line17, 
 # 4) return line 18
 
     def get_data(self, i):
         if (time.time()-self.start)>self.T_end:
         #if self.data_array[0]>= self.T_end:
             self.global_counter += 1
+
             self.x.pop(0)
             self.y0.pop(0)
             self.y1.pop(0)
@@ -209,6 +220,12 @@ class animate():
             self.y11.pop(0)
             self.y12.pop(0)
             self.y13.pop(0)
+            self.y14.pop(0)
+            self.y15.pop(0)
+            self.y16.pop(0)
+            self.y17.pop(0)
+            self.y18.pop(0)
+            self.y19.pop(0)
 # 5) y14.pop
             self.p.pop(0)
 
@@ -238,10 +255,63 @@ class animate():
         self.y12.append(self.data_array[13]) 
         self.y13.append(self.data_array[14])
 
-        self.y8.append(np.sqrt(np.abs(self.data_array[9])*101325/760*constant)*1000000.0-25)
-        self.y9.append(np.sqrt(np.abs(self.data_array[10])*101325/760*constant)*1000000.0)
+        R = 287.1
+        T = 298.0
+        h = 0.18
+        d = 0.12
+        h_2 = 0.07
+        d_2 = 0.095
+        v = d**2/4*np.pi*h
+        v_2 = d_2**2/4*np.pi*h_2
+        m_luft = (v-v_2)*1.18
+        
+        if time.time() - self.start > 15:
+
+            p1_l = max(self.y3[-1],0.0001) * 133.1
+            p2_l = max(self.y3[-3],0.0001) * 133.1
+            p1_l_right = max(self.y12[-1],0.0001) * 133.1
+            p2_l_right = max(self.y12[-3],0.0001) * 133.1
+
+            delta_t = max(self.x[-1]-self.x[-3],0.08)
+
+            flow = (self.y8[-7]+self.y8[-5]+self.y8[-3]+self.y8[-1]+((-1/p1_l+1/p2_l)*100000.0/delta_t*R*T*m_luft))/5
+            self.y8.append(flow)
+            if flow > 0:
+                self.y14.append(flow)
+                self.y15.append(0)
+            else:
+                self.y15.append(flow*-1.0)
+                self.y14.append(0)
+            flow2 = (self.y9[-7]+self.y9[-5]+self.y9[-3]+self.y9[-1]+((-1/p1_l_right+1/p2_l_right)*100000.0/delta_t*R*T*m_luft))/5
+            self.y9.append(flow2)
+
+            if flow2 > 0:
+                self.y16.append(flow2)
+                self.y17.append(0)
+            else:
+                self.y17.append(flow2*-1.0)
+                self.y16.append(0)
+
+            self.volume_left -= flow*delta_t*0.1
+            self.volume_right -= flow2*delta_t*0.1
+            self.y18.append(self.volume_left)
+            self.y19.append(self.volume_right) 
+        else:
+            self.y8.append(0)
+            self.y9.append(0)
+            self.y14.append(0)
+            self.y15.append(0)
+            self.y16.append(0)
+            self.y17.append(0)
+            self.y18.append(self.volume_left)
+            self.y19.append(self.volume_right)
+     
+
+        #self.y9.append(self.data_array[10])
         self.y10.append(self.data_array[15])
         self.y11.append(self.data_array[16])
+        #print((self.y8[-1])*60/1000)
+        #print(self.data_array[9])
 
 
 
@@ -279,26 +349,32 @@ class animate():
         y11 = self.y11
         y12 = self.y12
         y13 = self.y13
+        y14 = self.y14
+        y15 = self.y15
+        y16 = self.y16
+        y17 = self.y17
+        y18 = self.y18
+        y19 = self.y19
 # 7) self.y14
 
         p = self.p
 
-        return x, y0, y1, y2, y3, y4, y5, y6, y7 , y8 ,y9 ,y10 ,y11 ,y12 ,y13 ,p,
+        return x, y0, y1, y2, y3, y4, y5, y6, y7 , y8 ,y9 ,y10 ,y11 ,y12 ,y13 ,y14,y15,y16,y17,y18,y19,p,
 # 8) return y14    
 
     # get data from above
     def animate(self, i):
-        x, y0, y1, y2, y3, y4, y5, y6, y7 , y8 ,y9 ,y10 ,y11 ,y12 ,y13 ,p = self.get_data(i)
+        x, y0, y1, y2, y3, y4, y5, y6, y7 , y8 ,y9 ,y10 ,y11 ,y12 ,y13,y14,y15,y16,y17,y18,y19 ,p = self.get_data(i)
 # 9) y14
 
 	# eventually write data to plots
         self.line.set_data(x, y0)
-        self.line1.set_data(x, y1)
+        #self.line1.set_data(x, y1)
         self.line2.set_data(x, y2)
         self.line3.set_data(x, y3)
         self.line4.set_data(x, y4)
 
-        self.line5.set_data(x, y5)
+        #self.line5.set_data(x, y5)
         self.line6.set_data(x, y6)
         self.line7.set_data(x, y7)
         self.line8.set_data(x, y12)
@@ -307,19 +383,22 @@ class animate():
         self.line10.set_data(x, y10) #(x,y12)
         self.line11.set_data(x, y11) #(x,y13)
 
+        R = 461.4
+        T = 293.0
         #flow
-        self.line12.set_data(x, y8)
-        self.line13.set_data(x, y9)
+ 
+        self.line12.set_data(x, y14)
+        self.line13.set_data(x, y15)
 
-        self.line14.set_data(x, y11)
-        self.line15.set_data(x, y11)
+        self.line14.set_data(x, y16)
+        self.line15.set_data(x, y17)
 
-        self.line16.set_data(x, p)
-        self.line17.set_data(x, p)
+        self.line16.set_data(x, y18)
+        self.line17.set_data(x, y19)
 # 10) self.line18.set_data(x, y14)
 
 
-        return self.line, self.line1, self.line2, self.line3, self.line4, self.line5, self.line6, self.line7, self.line8, self.line9, self.line10, self.line11, self.line12, self.line13, self.line14, self.line15, self.line16, self.line17, 
+        return self.line, self.line2, self.line3, self.line4, self.line6, self.line7, self.line8, self.line9, self.line10, self.line11, self.line12, self.line13, self.line14, self.line15, self.line16, self.line17, 
 # 11) line18
     
     # dump file for saving with buttons 1 and 2
@@ -328,7 +407,7 @@ class animate():
         with open(date, 'w') as outcsv: #change 'w' to 'a' if we just want to append
             #configure writer to write standard csv file
             writer = csv.writer(outcsv, delimiter=',', quoting=csv.QUOTE_MINIMAL)
-            writer.writerow(['Time', 'lv', 'aorta','pulm. vein','compl. cha.','compl. cha. water','rv', 'pulm. art.', 'vena cava', 'compl. cha.', 'compl. cha. water', 'patch 1', 'patch 2', 'aortic valve', 'mitral valve'])
+            writer.writerow(['Time', 'lv', 'Test','pulm. vein','compl. cha.','aorta','Test', 'rv', 'vena cava', 'compl. cha. air', 'pulm. art.', 'patch 1', 'patch 2', 'aortic valve', 'mitral valve'])
 
 # 12) export sensor ...
 
@@ -353,7 +432,7 @@ if __name__ == '__main__':
 #subplotsh
     fig, ax = plt.subplots(2, 3, sharex=False, sharey=False, figsize=(20, 20))
     fig.set_tight_layout(True)
-    #move_figure(fig, 0, 0)
+    move_figure(fig, 0, 0)
 
 # initialize animate object
     a = animate(fig, ax, HOST, PORT)
@@ -370,5 +449,5 @@ if __name__ == '__main__':
     print("Start client")
 
 # plug animate object a into matplotlib animation object
-    anim = animation.FuncAnimation(fig, a.animate, init_func=a.init, interval=10, blit=True)
+    anim = animation.FuncAnimation(fig, a.animate, init_func=a.init, interval=20, blit=True)
     plt.show()
